@@ -1,6 +1,5 @@
 package ua.rd;
 
-import org.apache.poi.ddf.EscherMetafileBlip;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -8,7 +7,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,16 +48,16 @@ public class XlsxParser {
 
     private Employee parseRow(Row row) {
         int firstNameIndex = mapping.get(FIRST_NAME);
-        String firstName = row.getCell(firstNameIndex).getStringCellValue();
+        String firstName = getCellStringValue(row,firstNameIndex); //row.getCell(firstNameIndex).getStringCellValue();
         int lastNameIndex = mapping.get(LAST_NAME);
-        String lastName = row.getCell(lastNameIndex).getStringCellValue();
+        String lastName = getCellStringValue(row, lastNameIndex); //row.getCell(lastNameIndex).getStringCellValue();
         String name = firstName + " " + lastName;
 
         int upsaEmailIndex = mapping.get(UPSA_EMAIL);
-        String upsaEmail = row.getCell(upsaEmailIndex).getStringCellValue();
+        String upsaEmail = getCellStringValue(row,upsaEmailIndex); //row.getCell(upsaEmailIndex).getStringCellValue();
 
         int personalEmailIndex = mapping.get(PERSONAL_EMAIL);
-        String personalEmail = row.getCell(personalEmailIndex).getStringCellValue();
+        String personalEmail = getCellStringValue(row, personalEmailIndex); //row.getCell(personalEmailIndex).getStringCellValue();
 
         Employee employee = new Employee();
         employee.setName(name);
@@ -69,5 +67,12 @@ public class XlsxParser {
         return employee;
     }
 
-
+    private String getCellStringValue(Row row, int cellIndex) {
+        Cell cell = row.getCell(cellIndex);
+        if (cell != null) {
+            return cell.getStringCellValue();
+        } else {
+            return "";
+        }
+    }
 }
