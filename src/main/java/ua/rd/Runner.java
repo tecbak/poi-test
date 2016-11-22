@@ -1,24 +1,16 @@
 package ua.rd;
 
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import ua.rd.xlsxparcer.XlsxParser;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class Runner {
     public static void main(String[] args) throws IOException {
         XlsxParser parser = new XlsxParser();
-        File file = new File("employees.xlsx");
+        File file = new File("Import Template EXCEL.xlsx");
         List<Employee> employees = parser.parse(file);
 
         for (Employee employee : employees) {

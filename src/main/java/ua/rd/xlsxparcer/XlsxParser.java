@@ -1,9 +1,10 @@
-package ua.rd;
+package ua.rd.xlsxparcer;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import ua.rd.Employee;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,9 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ua.rd.Type.*;
+import static ua.rd.xlsxparcer.Type.*;
 
 public class XlsxParser {
+    private TypeDefiner definer = new TypeDefiner();
     private Map<Type, Integer> mapping = new HashMap<>();
 
     public List<Employee> parse(File file) throws IOException {
@@ -41,7 +43,7 @@ public class XlsxParser {
         for (Cell cell : row) {
             Integer index = cell.getColumnIndex();
             String name = cell.getStringCellValue().toUpperCase();
-            Type type = valueOf(name);
+            Type type = definer.define(name);
             mapping.put(type, index);
         }
     }
@@ -59,10 +61,18 @@ public class XlsxParser {
         int personalEmailIndex = mapping.get(PERSONAL_EMAIL);
         String personalEmail = getCellStringValue(row, personalEmailIndex); //row.getCell(personalEmailIndex).getStringCellValue();
 
+        int phoneIndex = mapping.get(Type.PHONE);
+        String phone = getCellStringValue(row, phoneIndex);
+
+        int recruiterEnglishIndex = mapping.get(Type.RECRUITER_ENGLISH);
+        String recruiterEnglish = getCellStringValue(row, recruiterEnglishIndex);
+
         Employee employee = new Employee();
         employee.setName(name);
         employee.setUpsaEmail(upsaEmail);
         employee.setPersonalEmail(personalEmail);
+        employee.setPhone(phone);
+        employee.setRecruiterEnglish(recruiterEnglish);
 
         return employee;
     }
